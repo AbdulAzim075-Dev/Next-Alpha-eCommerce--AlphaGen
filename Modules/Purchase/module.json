@@ -1,0 +1,16 @@
+{
+    "id": 60600854,
+    "name": "Purchase",
+    "alias": "purchase",
+    "author": "AlphaGen",
+    "author_url": "https://alphagen.dev",
+    "display_name": "Purchase Extension",
+    "description": "Purchase Extension - Advanced Stock & Inventory Management for AlphaGen eCommerce",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\Purchase\\App\\Providers\\PurchaseServiceProvider"
+    ],
+    "version": "1.0.0",
+    "image": "/modules/purchase/icon.jpg"
+}
