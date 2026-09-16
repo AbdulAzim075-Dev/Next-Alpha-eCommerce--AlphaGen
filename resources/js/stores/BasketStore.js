@@ -401,7 +401,7 @@ export const useBasketStore = defineStore("basketStore", {
                 const locationData = guestAddressStore.latitude && guestAddressStore.longitude
                     ? { latitude: guestAddressStore.latitude, longitude: guestAddressStore.longitude }
                     : {};
-                axios.post("/cart/checkout", {
+                return axios.post("/cart/checkout", {
                     shop_ids: this.selectedShopIds,
                     address_id: addressId && addressId,
                     area_id: area_id && area_id,
@@ -431,7 +431,7 @@ export const useBasketStore = defineStore("basketStore", {
                         });
                     }
                 }).catch((error) => {
-                    if (error.response.status == 401) {
+                    if (error.response && error.response.status == 401) {
                         authStore.token = null;
                         authStore.user = null;
                         authStore.addresses = [];
@@ -439,6 +439,13 @@ export const useBasketStore = defineStore("basketStore", {
                         toast.error(error.response.data.message, {
                             position: masterStore.langDirection === 'rtl' ? "bottom-right" : "bottom-left",
                         });
+                    } else {
+                        this.checkoutProducts = [];
+                        this.selectedShopIds = [];
+                        this.total_amount = 0;
+                        this.delivery_charge = 0;
+                        this.coupon_discount = 0;
+                        this.payable_amount = 0;
                     }
                 });
             }
@@ -446,6 +453,30 @@ export const useBasketStore = defineStore("basketStore", {
 
         checkShopIsSelected(shopId) {
             return this.selectedShopIds.includes(shopId);
+        },
+
+        /**
+         * Make sure at least one shop from the cart is selected for checkout and
+         * that the checkout products are freshly loaded. Falls back to selecting
+         * every shop in the cart when nothing is selected, drops stale shop ids,
+         * and returns `true` only when the checkout page has products to show.
+         */
+        async prepareCheckout() {
+            const shopIds = this.products.map((shop) => shop.shop_id);
+            this.selectedShopIds = this.selectedShopIds.filter((id) =>
+                shopIds.includes(id)
+            );
+            if (this.selectedShopIds.length === 0) {
+                this.selectedShopIds = shopIds;
+            }
+            if (this.selectedShopIds.length === 0) {
+                this.checkoutProducts = [];
+                return false;
+            }
+            try {
+                await this.fetchCheckoutProducts();
+            } catch (e) {}
+            return this.checkoutProducts.length > 0;
         },
     },
 

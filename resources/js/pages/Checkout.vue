@@ -94,7 +94,7 @@ const showProductItems = ref(true);
 
 const note = ref("");
 
-onMounted(() => {
+onMounted(async () => {
     window.scrollTo(0, 0);
     basketStore.coupon_code = "";
     // Meta's InitiateCheckout should fire once per visit, not on every address
@@ -102,9 +102,22 @@ onMounted(() => {
     basketStore.resetCheckoutTracking();
     if (!AuthStore.user && !AuthStore.access_token) {
         router.push({ name: 'home' });
+        return;
     }
     AuthStore.showAddressModal = false;
     AuthStore.showChangeAddressModal = false;
+
+    // The checkout page must never open with an empty cart. Reconcile the cart
+    // with the server first, then load the checkout products so "Your Order"
+    // shows the items even on direct navigation or a page refresh.
+    if (basketStore.products.length === 0) {
+        await basketStore.fetchCart();
+    }
+    if (basketStore.products.length === 0) {
+        router.push({ name: 'home' });
+        return;
+    }
+    await basketStore.prepareCheckout();
 });
 
 </script>

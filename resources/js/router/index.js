@@ -3,6 +3,7 @@ import { createRouter, createWebHistory } from "vue-router";
 
 // import master store
 import { useMaster } from "../stores/MasterStore";
+import { useBasketStore } from "../stores/BasketStore";
 import { useSeo } from "../composables/useSeo";
 
 // import layouts
@@ -478,6 +479,14 @@ router.beforeEach((to, from, next) => {
             image: master.logo || '',
             type: 'website',
         });
+    }
+
+    // Block direct access to the checkout page when the cart is empty.
+    if (to.name === 'checkout') {
+        const basket = useBasketStore();
+        if (basket.products.length === 0) {
+            return next({ name: 'home' });
+        }
     }
 
     next();

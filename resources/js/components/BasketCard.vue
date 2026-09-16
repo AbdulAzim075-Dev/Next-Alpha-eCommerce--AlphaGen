@@ -140,15 +140,10 @@ watch(route, () => {
     routerName.value = route.name;
 })
 
-const processToCheckout = () => {
+const processToCheckout = async () => {
+    const ready = await BasketStore.prepareCheckout();
 
-    if (!master.multiVendor) {
-        BasketStore.products.forEach(shop => {
-            BasketStore.selectedShopIds = [shop.shop_id];
-        });
-    }
-
-    if (BasketStore.selectedShopIds.length === 0) {
+    if (!ready) {
         toast.error('Please select at least one shop', {
             position: master.langDirection === 'rtl' ? "bottom-right" : "bottom-left",
         });
