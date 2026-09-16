@@ -298,14 +298,7 @@ const showChat = async () => {
 };
 
 onMounted(() => {
-    if (!master.multiVendor) {
-        basketStore.products.forEach((shop) => {
-            if (!basketStore.checkShopIsSelected(shop.shop_id)) {
-                basketStore.selectCartItemsForCheckout(shop.shop_id);
-            }
-            basketStore.selectedShopIds = [shop.shop_id];
-        });
-    }
+    basketStore.syncShopSelection();
 });
 
 const getShopVoucher = (shop) => {

@@ -19,6 +19,9 @@ const toast = useToast();
  */
 let checkoutTracked = false;
 
+/** Guard against slow/stale checkout responses overwriting newer selection data. */
+let checkoutRequestId = 0;
+
 /** Flatten the shop-grouped checkout payload into a plain product list. */
 const flattenCheckoutProducts = (checkoutProducts) =>
     (checkoutProducts ?? []).flatMap((shop) => shop.products ?? []);
@@ -29,6 +32,7 @@ export const useBasketStore = defineStore("basketStore", {
         products: [],
         checkoutProducts: [],
         selectedShopIds: [],
+        excludedShopIds: [],
         total_amount: 0,
         delivery_charge: 0,
         coupon_discount: 0,
@@ -122,6 +126,7 @@ export const useBasketStore = defineStore("basketStore", {
                     if (!data.is_buy_now) {
                         this.total = response.data.data.total;
                         this.products = response.data.data.cart_items;
+                        this.syncShopSelection();
                         toast(content, {
                             type: "default",
                             hideProgressBar: true,
@@ -175,6 +180,7 @@ export const useBasketStore = defineStore("basketStore", {
                 }).then((response) => {
                     this.total = response.data.data.total;
                     this.products = response.data.data.cart_items;
+                    this.syncShopSelection();
 
                     if (response.data.data.info) {
                         toast.warning(response.data.data.info, {
@@ -194,6 +200,7 @@ export const useBasketStore = defineStore("basketStore", {
                 this.products = [];
                 this.checkoutProducts = [];
                 this.selectedShopIds = [];
+                this.excludedShopIds = [];
                 this.total_amount = 0;
                 this.delivery_charge = 0;
                 this.coupon_discount = 0;
@@ -233,6 +240,7 @@ export const useBasketStore = defineStore("basketStore", {
                 ).then((response) => {
                     this.total = response.data.data.total;
                     this.products = response.data.data.cart_items;
+                    this.syncShopSelection();
                     this.fetchCheckoutProducts();
 
                     if (
@@ -299,6 +307,7 @@ export const useBasketStore = defineStore("basketStore", {
                 }).then((response) => {
                     this.total = response.data.data.total;
                     this.products = response.data.data.cart_items;
+                    this.syncShopSelection();
                     this.fetchCheckoutProducts();
 
                     if (response.data.data.info) {
@@ -338,6 +347,7 @@ export const useBasketStore = defineStore("basketStore", {
                 ).then((response) => {
                     this.total = response.data.data.total;
                     this.products = response.data.data.cart_items;
+                    this.syncShopSelection();
                     this.fetchCheckoutProducts();
 
                     if (response.data.data.info) {
@@ -357,14 +367,24 @@ export const useBasketStore = defineStore("basketStore", {
         },
 
         /**
-         * Select or deselect the given shop for checkout
+         * Select or deselect the given shop for checkout. Deselection is
+         * remembered so later cart changes do not silently re-select it.
          * @param {number} shop - the shop to select or deselect
          */
         selectCartItemsForCheckout(shop) {
-            if (!this.selectedShopIds.includes(shop)) {
-                this.selectedShopIds.push(shop);
-            } else {
+            if (!Array.isArray(this.excludedShopIds)) {
+                this.excludedShopIds = [];
+            }
+            if (this.selectedShopIds.includes(shop)) {
                 this.selectedShopIds = this.selectedShopIds.filter(
+                    (item) => item !== shop
+                );
+                if (!this.excludedShopIds.includes(shop)) {
+                    this.excludedShopIds.push(shop);
+                }
+            } else {
+                this.selectedShopIds.push(shop);
+                this.excludedShopIds = this.excludedShopIds.filter(
                     (item) => item !== shop
                 );
             }
@@ -372,10 +392,26 @@ export const useBasketStore = defineStore("basketStore", {
         },
 
         /**
+         * Align the checkout selection with the current cart so every cart shop
+         * is selected by default. Shops the user explicitly deselected stay
+         * deselected across cart changes, and dead shop ids are dropped.
+         */
+        syncShopSelection() {
+            const cartShopIds = (this.products ?? []).map(
+                (shop) => shop.shop_id
+            );
+            this.excludedShopIds = Array.isArray(this.excludedShopIds)
+                ? this.excludedShopIds.filter((id) => cartShopIds.includes(id))
+                : [];
+            this.selectedShopIds = cartShopIds.filter(
+                (id) => !this.excludedShopIds.includes(id)
+            );
+        },
+
+        /**
          * Fetches the checkout products for the currently selected shops and updates
          * the checkout-related state, including total amount, delivery charge, coupon
-         * discount, and payable amount. If the checkout products are empty, it clears
-         * the selected shop IDs. Uses the auth token for authorization.
+         * discount, and payable amount. Uses the auth token for authorization.
          */
         /**
          * What is being bought right now, captured for the Meta Purchase event.
@@ -397,6 +433,7 @@ export const useBasketStore = defineStore("basketStore", {
             const authStore = useAuth();
             const masterStore = useMaster();
             const guestAddressStore = useGuestAddress();
+            const requestId = ++checkoutRequestId;
             if (authStore.token || authStore.access_token) {
                 const locationData = guestAddressStore.latitude && guestAddressStore.longitude
                     ? { latitude: guestAddressStore.latitude, longitude: guestAddressStore.longitude }
@@ -412,6 +449,7 @@ export const useBasketStore = defineStore("basketStore", {
                         'X-Guest-Token': authStore.access_token
                     },
                 }).then((response) => {
+                    if (requestId !== checkoutRequestId) return;
                     this.checkoutProducts = response.data.data.checkout_items;
                     this.total_amount = response.data.data.checkout.total_amount;
                     this.delivery_charge = response.data.data.checkout.delivery_charge;
@@ -419,9 +457,6 @@ export const useBasketStore = defineStore("basketStore", {
                     this.payable_amount = response.data.data.checkout.payable_amount;
                     this.order_tax_amount = response.data.data.checkout.order_tax_amount;
                     this.all_vat_taxes = response.data.data.checkout.all_vat_taxes;
-                    if (this.checkoutProducts.length === 0) {
-                        this.selectedShopIds = [];
-                    }
 
                     if (!checkoutTracked && this.checkoutProducts.length > 0) {
                         checkoutTracked = true;
@@ -431,6 +466,7 @@ export const useBasketStore = defineStore("basketStore", {
                         });
                     }
                 }).catch((error) => {
+                    if (requestId !== checkoutRequestId) return;
                     if (error.response && error.response.status == 401) {
                         authStore.token = null;
                         authStore.user = null;
@@ -442,6 +478,7 @@ export const useBasketStore = defineStore("basketStore", {
                     } else {
                         this.checkoutProducts = [];
                         this.selectedShopIds = [];
+                        this.excludedShopIds = [];
                         this.total_amount = 0;
                         this.delivery_charge = 0;
                         this.coupon_discount = 0;
@@ -462,13 +499,7 @@ export const useBasketStore = defineStore("basketStore", {
          * and returns `true` only when the checkout page has products to show.
          */
         async prepareCheckout() {
-            const shopIds = this.products.map((shop) => shop.shop_id);
-            this.selectedShopIds = this.selectedShopIds.filter((id) =>
-                shopIds.includes(id)
-            );
-            if (this.selectedShopIds.length === 0) {
-                this.selectedShopIds = shopIds;
-            }
+            this.syncShopSelection();
             if (this.selectedShopIds.length === 0) {
                 this.checkoutProducts = [];
                 return false;

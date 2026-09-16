@@ -129,6 +129,7 @@ const toast = useToast();
 
 const showCardCanvas = () => {
     if (!master.basketCanvas) {
+        BasketStore.syncShopSelection();
         BasketStore.fetchCheckoutProducts();
     }
     master.basketCanvas = !master.basketCanvas
