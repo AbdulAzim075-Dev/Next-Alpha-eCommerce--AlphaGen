@@ -14,14 +14,7 @@
                 <img class="menu-icon" src="{{ asset('assets/icons-admin/Inventory.svg') }}" alt="icon" loading="lazy" />
                 {{ __('Purchase') }}
             </span>
-            @if (app()->environment('local'))
-            <span>
-                <i class="fas fa-gift"></i>
-                <img src="{{ asset('assets/icons-admin/caret-down.svg') }}" alt="icon" class="downIcon">
-            </span>
-            @else
-                <img src="{{ asset('assets/icons-admin/caret-down.svg') }}" alt="icon" class="downIcon">
-            @endif
+            <img src="{{ asset('assets/icons-admin/caret-down.svg') }}" alt="icon" class="downIcon">
         </a>
         <div class="collapse dropdownMenuCollapse {{ $request->routeIs('shop.purchase.*', 'shop.purchaseReturn.*') ? 'show' : '' }}"
             id="purchaseMenu">

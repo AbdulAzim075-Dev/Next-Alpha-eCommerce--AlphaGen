@@ -17,14 +17,7 @@
                         loading="lazy" />
                     {{ __('Pre-orders') }}
                 </span>
-                @if (app()->environment('local'))
-                    <span>
-                        <i class="fas fa-gift"></i>
-                        <img src="{{ asset('assets/icons-admin/caret-down.svg') }}" alt="icon" class="downIcon">
-                    </span>
-                @else
-                    <img src="{{ asset('assets/icons-admin/caret-down.svg') }}" alt="icon" class="downIcon">
-                @endif
+                <img src="{{ asset('assets/icons-admin/caret-down.svg') }}" alt="icon" class="downIcon">
             </a>
             <div class="collapse dropdownMenuCollapse {{ $request->routeIs('shop.preOrder.*') ? 'show' : '' }}"
                 id="preOrderMenu">

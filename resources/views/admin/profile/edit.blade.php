@@ -59,10 +59,7 @@
                                 </div>
 
                                 <div class="mt-3">
-                                    @php
-                                        $isLocal = app()->isLocal() ? 'readonly=true' : '';
-                                    @endphp
-                                    <x-input type="email" name="email" label="Email" placeholder="Enter Email Address" :value="auth()->user()->email" :readonly="$isLocal" required="true"/>
+                                    <x-input type="email" name="email" label="Email" placeholder="Enter Email Address" :value="auth()->user()->email" required="true"/>
                                 </div>
 
                             </div>

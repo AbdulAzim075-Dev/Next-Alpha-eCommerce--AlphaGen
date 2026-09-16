@@ -13,7 +13,6 @@ class GeneraleSettingSeeder extends Seeder
      */
     public function run(): void
     {
-        $isLocal = app()->environment('local') ? true : false;
         $currency = Currency::where('is_default', true)->first();
 
         GeneraleSetting::truncate();
@@ -42,7 +41,7 @@ class GeneraleSettingSeeder extends Seeder
             'logo_id' => null,
             'dark_logo_id' => null,
             'show_footer' => true,
-            'footer_phone' => $isLocal ? '+880123456789' : null,
+            'footer_phone' => null,
             'footer_text' => 'All right reserved by company',
             'footer_description' => 'The ultimate all-in-one solution for your eCommerce business worldwide.',
             'footer_logo_id' => null,
