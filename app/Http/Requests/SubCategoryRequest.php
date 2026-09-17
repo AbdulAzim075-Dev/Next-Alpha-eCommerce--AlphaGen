@@ -26,9 +26,9 @@ class SubCategoryRequest extends FormRequest
         return [
             'category' => ['required', 'array', 'exists:categories,id'],
             'name' => ['required', 'string', 'max:255'],
-            'name_ar' => ['nullable', 'string', 'max:255'],
+            'name_secondary' => ['nullable', 'string', 'max:255'],
             'short_description' => ['nullable', 'string', 'max:255'],
-            'short_description_ar' => ['nullable', 'string', 'max:255'],
+            'short_description_secondary' => ['nullable', 'string', 'max:255'],
             'thumbnail' => [$required,'string','max:255'],
         ];
     }

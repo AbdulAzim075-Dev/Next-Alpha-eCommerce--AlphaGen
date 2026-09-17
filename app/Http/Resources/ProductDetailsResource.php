@@ -51,11 +51,11 @@ class ProductDetailsResource extends JsonResource
         $price = $this->price;
         $discountPrice = $flashSaleProduct ? $flashSaleProduct->pivot?->price : $this->discount_price;
 
-        $isAr = $lang !== 'en';
-        $name = ($isAr && !empty($this->name_ar)) ? $this->name_ar : $this->name;
-        $shortDescription = ($isAr && !empty($this->short_description_ar)) ? $this->short_description_ar : $this->short_description;
-        $description = ($isAr && !empty($this->description_ar)) ? $this->description_ar : $this->description;
-        $brandName = ($isAr && !empty($this->brand?->name_ar)) ? $this->brand->name_ar : $this->brand?->name;
+        $isSecondary = is_secondary_lang($lang);
+        $name = ($isSecondary && !empty($this->name_secondary)) ? $this->name_secondary : $this->name;
+        $shortDescription = ($isSecondary && !empty($this->short_description_secondary)) ? $this->short_description_secondary : $this->short_description;
+        $description = ($isSecondary && !empty($this->description_secondary)) ? $this->description_secondary : $this->description;
+        $brandName = ($isSecondary && !empty($this->brand?->name_secondary)) ? $this->brand->name_secondary : $this->brand?->name;
         $shop = $this->shop;
 
         $lastOnline = $this->last_online >= now() ? true : false;
@@ -88,7 +88,7 @@ class ProductDetailsResource extends JsonResource
             'description' => $description,
             'shop' => [
                 'id' => $shop?->id,
-                'name' => ($isAr && !empty($shop?->name_ar)) ? $shop->name_ar : $shop?->name,
+                'name' => ($isSecondary && !empty($shop?->name_secondary)) ? $shop->name_secondary : $shop?->name,
                 'logo' => $shop?->logo,
                 'rating' => (float) round($shop?->averageRating, 1),
                 'estimated_delivery_time' => (string) ($shop?->estimated_delivery_time ?? '2-4 days'),

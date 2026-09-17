@@ -9,14 +9,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('sub_categories', function (Blueprint $table) {
-            $table->string('short_description_ar')->nullable()->after('short_description');
+            $table->string('short_description_secondary')->nullable()->after('short_description');
         });
     }
 
     public function down(): void
     {
         Schema::table('sub_categories', function (Blueprint $table) {
-            $table->dropColumn('short_description_ar');
+            $table->dropColumn('short_description_secondary');
         });
     }
 };

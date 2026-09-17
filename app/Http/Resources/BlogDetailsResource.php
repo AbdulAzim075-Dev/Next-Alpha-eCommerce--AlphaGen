@@ -16,11 +16,11 @@ class BlogDetailsResource extends JsonResource
     {
         $daysSinceCreated = $this->created_at->diffInDays(now());
 
-        $isAr = (request()->header('accept-language') ?? 'en') !== 'en';
+        $isSecondary = is_secondary_lang(request()->header('accept-language') ?? 'en');
 
         return [
             'id' => $this->id,
-            'title' => ($isAr && !empty($this->title_ar)) ? $this->title_ar : $this->title,
+            'title' => ($isSecondary && !empty($this->title_secondary)) ? $this->title_secondary : $this->title,
             'slug' => $this->slug,
             'category' => [
                 'id' => $this->category?->id,
@@ -32,7 +32,7 @@ class BlogDetailsResource extends JsonResource
             ],
             'thumbnail' => $this->thumbnail,
             'total_views' => $this->views->count(),
-            'description' => ($isAr && !empty($this->description_ar)) ? $this->description_ar : $this->description,
+            'description' => ($isSecondary && !empty($this->description_secondary)) ? $this->description_secondary : $this->description,
             'created_at' => $this->created_at->format('d M, Y'),
             'is_new' => $daysSinceCreated < 5 ? true : false,
             'tags' => TagResource::collection($this->tags),

@@ -68,7 +68,7 @@
                                                 onclick="openUpdateModal(this)"
                                                 data-id="{{ $brand->id }}"
                                                 data-name="{{ $brand->name }}"
-                                                data-name-ar="{{ $brand->name_ar }}"
+                                                data-name-secondary="{{ $brand->name_secondary }}"
                                                 data-thumbnail="{{ $brand->getRawOriginal('brand_thumbnail') }}"
                                                 data-thumbnail-url="{{ $brand->thumbnail }}">
                                                 <img src="{{ asset('assets/icons-admin/edit.svg') }}" alt="edit" loading="lazy" />
@@ -119,14 +119,18 @@
                             @enderror
                         </div>
 
-                        <div class="mb-3">
-                            <label for="name_ar" class="form-label">{{ __('Name (2nd Language)') }}</label>
-                            <input type="text" class="form-control" id="name_ar" name="name_ar"
-                                placeholder="Enter Arabic name" value="{{ old('name_ar') }}" />
-                            @error('name_ar')
-                                <p class="text text-danger m-0">{{ $message }}</p>
-                            @enderror
-                        </div>
+                        <x-secondary-lang-toggle for="brand-create" :checked="(bool) old('name_secondary')" />
+
+                        <x-secondary-lang-fields for="brand-create" :show="(bool) old('name_secondary')">
+                            <div class="mb-3">
+                                <label for="name_secondary" class="form-label">{{ __('Name') }} ({{ secondary_language_title() }})</label>
+                                <input type="text" class="form-control" id="name_secondary" name="name_secondary"
+                                    placeholder="Enter {{ secondary_language_title() }} name" value="{{ old('name_secondary') }}" />
+                                @error('name_secondary')
+                                    <p class="text text-danger m-0">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </x-secondary-lang-fields>
 
                         <div class="mb-3">
                             <x-image-picker name="thumbnail" />
@@ -172,14 +176,18 @@
                             @enderror
                         </div>
 
-                        <div class="mb-3">
-                            <label for="editNameAr" class="form-label">{{ __('Name (2nd Language)') }}</label>
-                            <input type="text" class="form-control" id="editNameAr" name="name_ar"
-                                placeholder="Enter Arabic name" value="" />
-                            @error('name_ar')
-                                <p class="text text-danger m-0">{{ $message }}</p>
-                            @enderror
-                        </div>
+                        <x-secondary-lang-toggle for="brand-edit" />
+
+                        <x-secondary-lang-fields for="brand-edit">
+                            <div class="mb-3">
+                                <label for="editNameSecondary" class="form-label">{{ __('Name') }} ({{ secondary_language_title() }})</label>
+                                <input type="text" class="form-control" id="editNameSecondary" name="name_secondary"
+                                    placeholder="Enter {{ secondary_language_title() }} name" value="" />
+                                @error('name_secondary')
+                                    <p class="text text-danger m-0">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </x-secondary-lang-fields>
 
                         <div class="mb-3">
                             <x-image-picker name="thumbnail" />
@@ -206,12 +214,18 @@
         const openUpdateModal = (button) => {
             const id = button.dataset.id;
             const name = button.dataset.name;
-            const nameAr = button.dataset.nameAr ?? '';
+            const nameSecondary = button.dataset.nameSecondary ?? '';
             const thumbnail = button.dataset.thumbnail ?? '';
             const thumbnailUrl = button.dataset.thumbnailUrl ?? '{{ asset('default/default.jpg') }}';
 
             $("#editName").val(name);
-            $("#editNameAr").val(nameAr);
+            $("#editNameSecondary").val(nameSecondary);
+            const editBrandToggle = document.querySelector('[data-secondary-toggle="brand-edit"]');
+            if (editBrandToggle) {
+                editBrandToggle.checked = !!nameSecondary;
+                document.querySelectorAll('[data-secondary-fields="brand-edit"]')
+                    .forEach((el) => el.classList.toggle('d-none', !nameSecondary));
+            }
             $("#formEditBrand").attr('action', `{{ route('admin.brand.update', ':id') }}`.replace(':id', id));
             $("#formEditBrand").find(".thumbnailPath").val(thumbnail);
             $("#formEditBrand").find(".thumbnailAdd").val(thumbnail ? thumbnail.split('/').pop() : '');

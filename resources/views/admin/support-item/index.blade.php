@@ -42,23 +42,32 @@
                                 </div>
 
                                 <div class="col-md-6">
-                                    <label class="form-label">{{ __('Title (2nd Language)') }}</label>
-                                    <input type="text" name="ar_title" class="form-control"
-                                        value="{{ old('ar_title', $supportItem->ar_title) }}">
-                                </div>
-
-                                <div class="col-md-6">
                                     <label class="form-label">{{ __('Description') }}</label>
                                     <input type="text" name="description" class="form-control"
                                         value="{{ old('description', $supportItem->description) }}" required>
                                 </div>
-
-                                <div class="col-md-6">
-                                    <label class="form-label">{{ __('Description (2nd Language)') }}</label>
-                                    <input type="text" name="ar_description" class="form-control"
-                                        value="{{ old('ar_description', $supportItem->ar_description) }}">
-                                </div>
                             </div>
+
+                            @php
+                                $supportItemHasSecondary = (bool) (old('secondary_title', $supportItem->secondary_title) || old('secondary_description', $supportItem->secondary_description));
+                            @endphp
+                            <x-secondary-lang-toggle for="support-item-{{ $supportItem->id }}" :checked="$supportItemHasSecondary" />
+
+                            <x-secondary-lang-fields for="support-item-{{ $supportItem->id }}" :show="$supportItemHasSecondary">
+                                <div class="row g-3 mt-0">
+                                    <div class="col-md-6">
+                                        <label class="form-label">{{ __('Title') }} ({{ secondary_language_title() }})</label>
+                                        <input type="text" name="secondary_title" class="form-control"
+                                            value="{{ old('secondary_title', $supportItem->secondary_title) }}">
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label class="form-label">{{ __('Description') }} ({{ secondary_language_title() }})</label>
+                                        <input type="text" name="secondary_description" class="form-control"
+                                            value="{{ old('secondary_description', $supportItem->secondary_description) }}">
+                                    </div>
+                                </div>
+                            </x-secondary-lang-fields>
 
                             <div class="mt-4">
                                 <button type="submit" class="btn btn-primary">

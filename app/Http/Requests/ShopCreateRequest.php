@@ -55,7 +55,7 @@ class ShopCreateRequest extends FormRequest
             'address' => ['nullable', 'string'],
             'profile_photo' => [$required, 'image', 'mimes:jpg,png,jpeg,gif', 'max:2048'],
             'shop_name' => ['required', 'string', 'max:100'],
-            'name_ar' => ['nullable', 'string', 'max:100'],
+            'name_secondary' => ['nullable', 'string', 'max:100'],
             'shop_logo' => [$required, 'image', 'mimes:jpg,png,jpeg,gif', 'max:2048'],
             'shop_banner' => [$required, 'image', 'mimes:jpg,png,jpeg,gif', 'max:2048'],
             'description' => ['nullable', 'string', 'max:200'],

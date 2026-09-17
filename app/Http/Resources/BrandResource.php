@@ -14,12 +14,12 @@ class BrandResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $isAr = (request()->header('accept-language') ?? 'en') !== 'en';
+        $isSecondary = is_secondary_lang(request()->header('accept-language') ?? 'en');
 
         return [
             'id' => $this->id,
             'slug' => $this->slug,
-            'name' => ($isAr && !empty($this->name_ar)) ? $this->name_ar : $this->name,
+            'name' => ($isSecondary && !empty($this->name_secondary)) ? $this->name_secondary : $this->name,
             'thumbnail' => $this->thumbnail,
             'product_count' => $this->whenCounted('products'),
         ];

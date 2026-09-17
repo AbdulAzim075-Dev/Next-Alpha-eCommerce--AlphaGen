@@ -26,7 +26,7 @@ class BrandRepository extends Repository
 
         $brand = self::create([
             'name' => $request->name,
-            'name_ar' => $request->name_ar ?? $request->name,
+            'name_secondary' => $request->name_secondary ?? $request->name,
             'brand_thumbnail' => $request->thumbnail,
             'is_active' => true,
             'shop_id' => $shop->id,
@@ -54,7 +54,7 @@ class BrandRepository extends Repository
     {
         $brand->update([
             'name' => $request->name,
-            'name_ar' => $request->name_ar ??  $request->name,
+            'name_secondary' => $request->name_secondary ??  $request->name,
             'brand_thumbnail' => $request->thumbnail ?? $brand->getRawOriginal('brand_thumbnail'),
         ]);
 

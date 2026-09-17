@@ -25,11 +25,11 @@ class BlogRequest extends FormRequest
 
         return [
             'title' => 'required|string|max:200',
-            'title_ar' => 'nullable|string|max:200',
+            'title_secondary' => 'nullable|string|max:200',
             'category' => 'required|exists:categories,id',
             'thumbnail' => "$required|string|max:255",
             'description' => 'required|string',
-            'description_ar' => 'nullable|string',
+            'description_secondary' => 'nullable|string',
             'tags' => 'nullable|array',
         ];
     }

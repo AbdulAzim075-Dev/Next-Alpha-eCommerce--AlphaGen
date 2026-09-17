@@ -191,4 +191,26 @@ class LanguageController extends Controller
 
         return to_route('admin.language.index')->withSuccess(__('Language set successfully'));
     }
+
+    public function setSecondaryDefault(Language $language)
+    {
+        $name = $language?->name ?? config('app.secondary_locale', 'bn');
+
+        $response = $this->setEnv('SECONDARY_LOCALE', $name);
+
+        if ($response['type'] == 'error') {
+            return back()->with('alertError', [
+                'message' => $response['message'],
+                'message2' => 'Please change your .env file permission and try again. set permission to 0777',
+            ]);
+        }
+
+        config(['app.secondary_locale' => $name]);
+
+        Artisan::call('config:clear');
+
+        Cache::forget('secondary_language_title');
+
+        return to_route('admin.language.index')->withSuccess(__('Secondary language set successfully'));
+    }
 }

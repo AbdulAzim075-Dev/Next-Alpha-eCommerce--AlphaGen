@@ -23,11 +23,18 @@
                             label="Page Name" :readonly="! $page->is_editable" />
                     </div>
 
-                    <div class="mt-3">
-                        <x-input name='title_ar' id="title_ar" type="text" placeholder="Arabic Page Name"
-                            value="{{ old('title_ar', $page->title_ar) }}" label="Page Name (2nd Language)"
-                            :readonly="! $page->is_editable" />
-                    </div>
+                    @php
+                        $hasSecondaryPage = (bool) (old('title_secondary', $page->title_secondary) || old('content_secondary', $page->description_secondary));
+                    @endphp
+                    <x-secondary-lang-toggle for="page-edit" :checked="$hasSecondaryPage" />
+
+                    <x-secondary-lang-fields for="page-edit" :show="$hasSecondaryPage">
+                        <div class="mt-3">
+                            <x-input name='title_secondary' id="title_secondary" type="text" placeholder="{{ secondary_language_title() }} Page Name"
+                                value="{{ old('title_secondary', $page->title_secondary) }}" label="{{ __('Page Name') }} ({{ secondary_language_title() }})"
+                                :readonly="! $page->is_editable" />
+                        </div>
+                    </x-secondary-lang-fields>
 
                     <div class="mt-3">
                         <label for="editor" class="fw-bold mb-2">{{ __('Content') }}</label>
@@ -47,17 +54,19 @@
                         @enderror
                     </div>
 
-                    <div class="mt-4">
-                        <label for="editor_ar" class="fw-bold mb-2">{{ __('Content (2nd Language)') }}</label>
-                        <div id="editor_ar" @if (! $page->is_editable) style="background-color: #e9ecef;" @endif>
-                            {!! old('content_ar', $page->description_ar) !!}
+                    <x-secondary-lang-fields for="page-edit" :show="$hasSecondaryPage">
+                        <div class="mt-4">
+                            <label for="editor_secondary" class="fw-bold mb-2">{{ __('Content') }} ({{ secondary_language_title() }})</label>
+                            <div id="editor_secondary" style="@if (! $page->is_editable) background-color: #e9ecef; @endif min-height: 200px">
+                                {!! old('content_secondary', $page->description_secondary) !!}
+                            </div>
+                            <input type="hidden" id="description_secondary" name="content_secondary"
+                                value="{{ old('content_secondary', $page->description_secondary) }}">
+                            @error('content_secondary')
+                                <p class="text text-danger m-0">{{ $message }}</p>
+                            @enderror
                         </div>
-                        <input type="hidden" id="description_ar" name="content_ar"
-                            value="{{ old('content_ar', $page->description_ar) }}">
-                        @error('content_ar')
-                            <p class="text text-danger m-0">{{ $message }}</p>
-                        @enderror
-                    </div>
+                    </x-secondary-lang-fields>
                 </div>
                 <div class="card-footer text-center">
                     <button class="btn btn-primary px-4 py-2.5" type="submit">
@@ -149,7 +158,7 @@
             document.getElementById('description').value = correctULTagFromQuill(quill.root.innerHTML);
         });
 
-        const quillAr = new Quill('#editor_ar', {
+        const quillSecondary = new Quill('#editor_secondary', {
             theme: 'snow',
             readOnly: {{ $page->is_editable ? 'false' : 'true' }},
             modules: {
@@ -192,8 +201,8 @@
             }
         });
 
-        quillAr.on('text-change', function(delta, oldDelta, source) {
-            document.getElementById('description_ar').value = correctULTagFromQuill(quillAr.root.innerHTML);
+        quillSecondary.on('text-change', function(delta, oldDelta, source) {
+            document.getElementById('description_secondary').value = correctULTagFromQuill(quillSecondary.root.innerHTML);
         });
     </script>
 

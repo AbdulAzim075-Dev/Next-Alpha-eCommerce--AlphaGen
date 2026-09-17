@@ -114,6 +114,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Application Secondary Locale
+    |--------------------------------------------------------------------------
+    |
+    | The secondary locale determines which language fills the "<secondary>"
+    | columns (previously named *_ar / ar_*). It can be switched from the
+    | admin Languages page and defaults to Bangla (bn).
+    |
+    */
+
+    'secondary_locale' => env('SECONDARY_LOCALE', 'bn'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Faker Locale
     |--------------------------------------------------------------------------
     |

@@ -24,7 +24,7 @@ class FooterResource extends JsonResource
         return [
             'id' => $this->id,
             'position' => $this->order,
-            'title' => $lang == 'ar' ? $this->ar_title : $this->title,
+            'title' => is_secondary_lang($lang) ? $this->secondary_title : $this->title,
             'items' => FooterItemResource::collection($items),
         ];
     }

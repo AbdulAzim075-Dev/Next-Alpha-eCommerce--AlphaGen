@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use App\Models\Cart;
 use App\Models\User;
 use App\Models\Currency;
+use App\Models\Language;
 use Illuminate\Http\Request;
 use App\Models\DeliveryCharge;
 use Illuminate\Support\Number;
@@ -13,6 +14,81 @@ use Nwidart\Modules\Facades\Module;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\PersonalAccessToken;
+
+if (! function_exists('secondary_locale')) {
+    /**
+     * Get the locale code that fills the secondary language columns.
+     */
+    function secondary_locale(): string
+    {
+        return (string) (config('app.secondary_locale') ?? 'bn');
+    }
+}
+
+if (! function_exists('is_secondary_lang')) {
+    /**
+     * Determine if the given language is the configured secondary language.
+     */
+    function is_secondary_lang(?string $lang): bool
+    {
+        return $lang !== null && $lang === secondary_locale();
+    }
+}
+
+if (! function_exists('secondary_language_title')) {
+    /**
+     * Get a human readable title for the configured secondary language.
+     */
+    function secondary_language_title(): string
+    {
+        $code = secondary_locale();
+
+        $title = Cache::remember('secondary_language_title', 60 * 24 * 30, function () use ($code) {
+            $language = Language::query()->where('name', $code)->first();
+
+            if ($language) {
+                return $language->title;
+            }
+
+            return null;
+        });
+
+        if ($title) {
+            return $title;
+        }
+
+        return match (strtolower($code)) {
+            'en' => 'English',
+            'bn' => 'Bengali',
+            'ar' => 'Arabic',
+            'fr' => 'French',
+            'es' => 'Spanish',
+            'de' => 'German',
+            'pt' => 'Portuguese',
+            'hi' => 'Hindi',
+            'ur' => 'Urdu',
+            'tr' => 'Turkish',
+            default => ucfirst($code),
+        };
+    }
+}
+
+if (! function_exists('is_rtl_lang')) {
+    /**
+     * Determine if the given language uses a right-to-left script,
+     * based on the direction configured for that language.
+     */
+    function is_rtl_lang(?string $lang = null): bool
+    {
+        $code = $lang ?? app()->getLocale();
+
+        $direction = Cache::remember('lang_direction_' . $code, 60 * 24 * 30, function () use ($code) {
+            return Language::query()->where('name', $code)->value('direction') ?? 'ltr';
+        });
+
+        return $direction === 'rtl';
+    }
+}
 
 if (! function_exists('getDistance')) {
     /**

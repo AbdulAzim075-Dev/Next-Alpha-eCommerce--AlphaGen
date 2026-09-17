@@ -26,19 +26,19 @@ class PageController extends Controller
     {
         $request->validate([
             'title' => 'required',
-            'title_ar' => 'nullable|string|max:255',
+            'title_secondary' => 'nullable|string|max:255',
             'content' => 'required',
-            'content_ar' => 'nullable|string',
+            'content_secondary' => 'nullable|string',
             'icon' => 'nullable|string|max:255',
         ]);
 
         Page::create([
             'title' => $request->title,
-            'title_ar' => $request->title_ar,
+            'title_secondary' => $request->title_secondary,
             'slug' => Str::slug($request->title),
             'url' => 'page/' . Str::slug($request->title),
             'description' => $request->content,
-            'description_ar' => $request->content_ar,
+            'description_secondary' => $request->content_secondary,
             'icon' => $request->icon,
             'is_active' => true,
             'is_default' => false,
@@ -79,19 +79,19 @@ class PageController extends Controller
 
         $request->validate([
             'title' => 'required',
-            'title_ar' => 'nullable|string|max:255',
+            'title_secondary' => 'nullable|string|max:255',
             'content' => 'required',
-            'content_ar' => 'nullable|string',
+            'content_secondary' => 'nullable|string',
             'icon' => 'nullable|string|max:255',
         ]);
 
         $page->update([
             'title' => $request->title,
-            'title_ar' => $request->title_ar ?? $page->title_ar,
+            'title_secondary' => $request->title_secondary ?? $page->title_secondary,
             'slug' => $page->is_default ? $page->slug : Str::slug($request->title),
             'url' => $page->is_default ? $page->slug : 'page/' . Str::slug($request->title),
             'description' => $request->content,
-            'description_ar' => $request->content_ar ?? $page->description_ar,
+            'description_secondary' => $request->content_secondary ?? $page->description_secondary,
             'icon' => $request->filled('icon') ? $request->icon : $page->getRawOriginal('icon'),
         ]);
 

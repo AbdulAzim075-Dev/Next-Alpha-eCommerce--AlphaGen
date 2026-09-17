@@ -18,7 +18,7 @@ class FooterItemResource extends JsonResource
         return [
             'id' => $this->id,
             'type' => $this->type,
-            'title' => $lang == 'ar' ? $this->ar_title : $this->title,
+            'title' => is_secondary_lang($lang) ? $this->secondary_title : $this->title,
             'icon' => $this->icon,
             'url' => $this->url,
             'target' => $this->target,

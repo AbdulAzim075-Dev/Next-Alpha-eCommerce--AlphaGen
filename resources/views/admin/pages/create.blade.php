@@ -22,10 +22,17 @@
                             label="Page Name" />
                     </div>
 
-                    <div class="mt-3">
-                        <x-input name='title_ar' id="title_ar" type="text" placeholder="Arabic Page Name"
-                            value="{{ old('title_ar') }}" label="Page Name (2nd Language)" />
-                    </div>
+                    @php
+                        $hasSecondaryPage = (bool) (old('title_secondary') || old('content_secondary'));
+                    @endphp
+                    <x-secondary-lang-toggle for="page-create" :checked="$hasSecondaryPage" />
+
+                    <x-secondary-lang-fields for="page-create" :show="$hasSecondaryPage">
+                        <div class="mt-3">
+                            <x-input name='title_secondary' id="title_secondary" type="text" placeholder="{{ secondary_language_title() }} Page Name"
+                                value="{{ old('title_secondary') }}" label="{{ __('Page Name') }} ({{ secondary_language_title() }})" />
+                        </div>
+                    </x-secondary-lang-fields>
 
                     <div class="mt-3">
                         <label for="editor" class="fw-bold mb-2">{{ __('Content') }}</label>
@@ -42,16 +49,18 @@
                         @enderror
                     </div>
 
-                    <div class="mt-4">
-                        <label for="editor_ar" class="fw-bold mb-2">{{ __('Content (2nd Language)') }}</label>
-                        <div id="editor_ar">
-                            {!! old('content_ar') !!}
+                    <x-secondary-lang-fields for="page-create" :show="$hasSecondaryPage">
+                        <div class="mt-4">
+                            <label for="editor_secondary" class="fw-bold mb-2">{{ __('Content') }} ({{ secondary_language_title() }})</label>
+                            <div id="editor_secondary" style="min-height: 200px">
+                                {!! old('content_secondary') !!}
+                            </div>
+                            <input type="hidden" id="description_secondary" name="content_secondary" value="{{ old('content_secondary') }}" />
+                            @error('content_secondary')
+                                <p class="text text-danger m-0">{{ $message }}</p>
+                            @enderror
                         </div>
-                        <input type="hidden" id="description_ar" name="content_ar" value="{{ old('content_ar') }}" />
-                        @error('content_ar')
-                            <p class="text text-danger m-0">{{ $message }}</p>
-                        @enderror
-                    </div>
+                    </x-secondary-lang-fields>
                 </div>
                 <div class="card-footer text-center">
                     <button class="btn btn-primary px-4 py-2.5" type="submit">
@@ -133,7 +142,7 @@
             document.getElementById('description').value = correctULTagFromQuill(quill.root.innerHTML);
         });
 
-        const quillAr = new Quill('#editor_ar', {
+        const quillSecondary = new Quill('#editor_secondary', {
             theme: 'snow',
             modules: {
                 toolbar: [
@@ -175,8 +184,8 @@
             }
         });
 
-        quillAr.on('text-change', function(delta, oldDelta, source) {
-            document.getElementById('description_ar').value = correctULTagFromQuill(quillAr.root.innerHTML);
+        quillSecondary.on('text-change', function(delta, oldDelta, source) {
+            document.getElementById('description_secondary').value = correctULTagFromQuill(quillSecondary.root.innerHTML);
         });
     </script>
 

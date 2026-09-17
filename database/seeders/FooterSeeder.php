@@ -17,7 +17,7 @@ class FooterSeeder extends Seeder
             [
                 'id' => 1,
                 'title' => null,
-                'ar_title' => null,
+                'secondary_title' => null,
                 'description' => null,
                 'order' => 0,
                 'is_active' => 1,
@@ -27,7 +27,7 @@ class FooterSeeder extends Seeder
             [
                 'id' => 2,
                 'title' => 'Shop',
-                'ar_title' => 'متجر',
+                'secondary_title' => 'দোকান',
                 'description' => null,
                 'order' => 1,
                 'is_active' => 1,
@@ -37,7 +37,7 @@ class FooterSeeder extends Seeder
             [
                 'id' => 3,
                 'title' => 'Customer Service',
-                'ar_title' => 'خدمة العملاء',
+                'secondary_title' => 'গ্রাহক সেবা',
                 'description' => null,
                 'order' => 2,
                 'is_active' => 1,
@@ -47,7 +47,7 @@ class FooterSeeder extends Seeder
             [
                 'id' => 4,
                 'title' => 'Company',
-                'ar_title' => 'شركة',
+                'secondary_title' => 'কোম্পানি',
                 'description' => null,
                 'order' => 3,
                 'is_active' => 1,
@@ -57,7 +57,7 @@ class FooterSeeder extends Seeder
             [
                 'id' => 5,
                 'title' => 'Download Our App',
-                'ar_title' => 'تحميل التطبيق',
+                'secondary_title' => 'আমাদের অ্যাপ ডাউনলোড করুন',
                 'description' => null,
                 'order' => 4,
                 'is_active' => 1,

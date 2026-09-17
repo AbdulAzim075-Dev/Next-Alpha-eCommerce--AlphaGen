@@ -36,9 +36,9 @@ class SupportItemController extends Controller
 
         $supportItem->update([
             'title' => $request->title,
-            'ar_title' => $request->ar_title,
+            'secondary_title' => $request->secondary_title,
             'description' => $request->description,
-            'ar_description' => $request->ar_description,
+            'secondary_description' => $request->secondary_description,
             'icon' => $icon,
             'is_active' => $request->boolean('is_active'),
         ]);

@@ -26,9 +26,9 @@ class CategoryRepository extends Repository
     {
         $category = self::create([
             'name' => $request->name,
-            'name_ar' => $request->name_ar ?? $request->name,
+            'name_secondary' => $request->name_secondary ?? $request->name,
             'description' => $request->description,
-            'description_ar' => $request->description_ar ?? $request->description,
+            'description_secondary' => $request->description_secondary ?? $request->description,
             'status' => true,
             'order_by' => $request->input('order_by', 0),
             'icon' => $request->icon,
@@ -59,9 +59,9 @@ class CategoryRepository extends Repository
     {
         $category->update([
             'name' => $request->name,
-            'name_ar' => $request->name_ar ?? $request->name_ar,
+            'name_secondary' => $request->name_secondary ?? $request->name,
             'description' => $request->description,
-            'description_ar' => $request->description_ar ?? $request->description,
+            'description_secondary' => $request->description_secondary ?? $request->description,
             'order_by' => $request->input('order_by', $category->order_by ?? 0),
             'icon' => $request->filled('icon') ? $request->icon : $category->getRawOriginal('icon'),
             'category_thumbnail' => $request->filled('thumbnail') ? $request->thumbnail : $category->getRawOriginal('category_thumbnail'),

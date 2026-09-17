@@ -28,8 +28,8 @@ class CategoryRequest extends FormRequest
 
         return [
             'name' => ['required', 'string', 'max:255'],
-            'name_ar' => ['nullable', 'string', 'max:255'],
-            'description_ar' => ['nullable', 'string'],
+            'name_secondary' => ['nullable', 'string', 'max:255'],
+            'description_secondary' => ['nullable', 'string'],
             'order_by' => ['nullable', 'integer', 'min:0'],
             'thumbnail' => ['nullable', 'string', 'max:255'],
             'icon' => [$iconRequired, 'string', 'max:255'],

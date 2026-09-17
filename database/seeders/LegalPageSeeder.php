@@ -18,38 +18,38 @@ class LegalPageSeeder extends Seeder
         $legalPages = [
             [
                 'title' => 'Privacy Policy',
-                'title_ar' => 'سياسة الخصوصية',
+                'title_secondary' => 'গোপনীয়তা নীতি',
                 'slug' => 'privacy-policy',
                 'description' => $faker->randomHtml(),
-                'description_ar' => $this->arabicHtmlBlock(),
+                'description_secondary' => $this->secondaryHtmlBlock(),
             ],
             [
                 'title' => 'Terms of Service',
-                'title_ar' => 'شروط الخدمة',
+                'title_secondary' => 'পরিষেবার শর্তাবলী',
                 'slug' => 'terms-and-conditions',
                 'description' => $faker->randomHtml(),
-                'description_ar' => $this->arabicHtmlBlock(),
+                'description_secondary' => $this->secondaryHtmlBlock(),
             ],
             [
                 'title' => 'Return policy / Refund Policy',
-                'title_ar' => 'سياسة الإرجاع والاسترداد',
+                'title_secondary' => 'রিটার্ন ও রিফান্ড নীতি',
                 'slug' => 'return-and-refund-policy',
                 'description' => $faker->randomHtml(),
-                'description_ar' => $this->arabicHtmlBlock(),
+                'description_secondary' => $this->secondaryHtmlBlock(),
             ],
             [
                 'title' => 'Shipping & Delivery Policy',
-                'title_ar' => 'سياسة الشحن والتسليم',
+                'title_secondary' => 'শিপিং ও ডেলিভারি নীতি',
                 'slug' => 'shipping-and-delivery-policy',
                 'description' => $faker->randomHtml(),
-                'description_ar' => $this->arabicHtmlBlock(),
+                'description_secondary' => $this->secondaryHtmlBlock(),
             ],
             [
                 'title' => 'About Us',
-                'title_ar' => 'من نحن',
+                'title_secondary' => 'আমাদের সম্পর্কে',
                 'slug' => 'about-us',
                 'description' => $faker->randomHtml(4, rand(4, 10)),
-                'description_ar' => $this->arabicHtmlBlock(),
+                'description_secondary' => $this->secondaryHtmlBlock(),
             ],
         ];
 
@@ -58,8 +58,8 @@ class LegalPageSeeder extends Seeder
         }
     }
 
-    private function arabicHtmlBlock(): string
+    private function secondaryHtmlBlock(): string
     {
-        return '<h2>محتوى قانوني</h2><p>هذا محتوى عربي تجريبي لعرض الصفحات القانونية مع دعم اللغة العربية في بيانات البذور.</p><p>يمكن تحديث هذا النص لاحقًا بالمحتوى الرسمي المطلوب.</p>';
+        return '<h2>আইনি বিষয়বস্তু</h2><p>এটি আইনি পৃষ্ঠা প্রদর্শনে বহু-ভাষা সমর্থন সহ বাংলা পরীক্ষামূলক বিষয়বস্তু।</p><p>এই লেখাটি পরে প্রয়োজনীয় অফিসিয়াল বিষয়বস্তু দিয়ে আপডেট করা যেতে পারে।</p>';
     }
 }

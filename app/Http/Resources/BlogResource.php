@@ -14,9 +14,9 @@ class BlogResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $isAr = (request()->header('accept-language') ?? 'en') !== 'en';
+        $isSecondary = is_secondary_lang(request()->header('accept-language') ?? 'en');
 
-        $rawDescription = ($isAr && !empty($this->description_ar)) ? $this->description_ar : $this->description;
+        $rawDescription = ($isSecondary && !empty($this->description_secondary)) ? $this->description_secondary : $this->description;
         $description = strip_tags($rawDescription);
         $description = str_replace(['&nbsp;', '&nbsp', '&#160;', '&#160'], ' ', $description);
         $description = preg_replace('/\s+/', ' ', $description);
@@ -26,7 +26,7 @@ class BlogResource extends JsonResource
 
         return [
             'id' => $this->id,
-            'title' => ($isAr && !empty($this->title_ar)) ? $this->title_ar : $this->title,
+            'title' => ($isSecondary && !empty($this->title_secondary)) ? $this->title_secondary : $this->title,
             'slug' => $this->slug,
             'category' => [
                 'id' => $this->category?->id,

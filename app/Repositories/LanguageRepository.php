@@ -19,10 +19,8 @@ class LanguageRepository extends Repository
                 $title = $name;
                 if ($name == 'en') {
                     $title = 'English';
-                } elseif ($name == 'ar') {
-                    $title = 'Arabic';
-                } elseif ($name == 'bn') {
-                    $title = 'Bengali';
+                } elseif ($name == secondary_locale()) {
+                    $title = secondary_language_title();
                 }
 
                 self::create([

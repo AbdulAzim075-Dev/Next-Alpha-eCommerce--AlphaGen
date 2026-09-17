@@ -80,21 +80,30 @@
         <div class="card mt-4 mb-4">
             <div class="card-body">
 
-                <div class="d-flex gap-2 border-bottom pb-2">
+                @php
+                    $hasSecondaryShop = (bool) old('name_secondary', $shop->name_secondary);
+                @endphp
+
+                <div class="d-flex gap-2 align-items-center border-bottom pb-2">
                     <i class="fa-solid fa-user"></i>
-                    <h5>
+                    <h5 class="mb-0">
                         {{ __('Shop Information') }}
                     </h5>
+                    <x-secondary-lang-toggle for="shop-edit" class="ms-auto" :checked="$hasSecondaryShop" />
                 </div>
                 <div class="row mt-3">
                     <div class="col-md-4">
                         <x-input type="text" name="shop_name" label="Shop Name" placeholder="Enter Shop Name"
                             :value="$shop->name" required="true" />
                     </div>
+                </div>
 
-                    <div class="col-md-4 mt-3 mt-md-0">
-                        <x-input type="text" name="name_ar" label="Shop Name (2nd Language)" placeholder="Enter Arabic shop name"
-                            :value="old('name_ar', $shop->name_ar)" />
+                <div class="row mt-3">
+                    <div class="col-md-4">
+                        <x-secondary-lang-fields for="shop-edit" :show="$hasSecondaryShop">
+                            <x-input type="text" name="name_secondary" label="{{ __('Shop Name') }} ({{ secondary_language_title() }})" placeholder="Enter {{ secondary_language_title() }} shop name"
+                                :value="old('name_secondary', $shop->name_secondary)" />
+                        </x-secondary-lang-fields>
                     </div>
 
                     <div class="col-md-4 mt-3 mt-md-0">

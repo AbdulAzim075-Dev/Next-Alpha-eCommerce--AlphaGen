@@ -16,11 +16,11 @@ class ProductShopResource extends JsonResource
     {
         $lastOnline = $this->last_online >= now() ? true : false;
 
-        $isAr = (request()->header('accept-language') ?? 'en') !== 'en';
+        $isSecondary = is_secondary_lang(request()->header('accept-language') ?? 'en');
 
         return [
             'id' => $this->id,
-            'name' => ($isAr && !empty($this->name_ar)) ? $this->name_ar : $this->name,
+            'name' => ($isSecondary && !empty($this->name_secondary)) ? $this->name_secondary : $this->name,
             'address' => $this->address,
             'logo' => $this->logo,
             'rating' => (float) ($this->averageRating > 0) ? $this->averageRating : 5.0,

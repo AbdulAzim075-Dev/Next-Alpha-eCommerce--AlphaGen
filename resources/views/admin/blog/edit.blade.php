@@ -21,10 +21,17 @@
                                 required="true" :value="$blog->title" />
                         </div>
 
-                        <div class="mt-3">
-                            <x-input label="Title (2nd Language)" name="title_ar" type="text"
-                                placeholder="Enter Arabic title" :value="old('title_ar', $blog->title_ar)" />
-                        </div>
+                        @php
+                            $hasSecondaryBlog = (bool) (old('title_secondary', $blog->title_secondary) || old('description_secondary', $blog->description_secondary));
+                        @endphp
+                        <x-secondary-lang-toggle for="blog-edit" :checked="$hasSecondaryBlog" />
+
+                        <x-secondary-lang-fields for="blog-edit" :show="$hasSecondaryBlog">
+                            <div class="mt-3">
+                                <x-input label="{{ __('Title') }} ({{ secondary_language_title() }})" name="title_secondary" type="text"
+                                    placeholder="Enter {{ secondary_language_title() }} title" :value="old('title_secondary', $blog->title_secondary)" />
+                            </div>
+                        </x-secondary-lang-fields>
 
                         <div class="mt-3">
                             <label class="form-label">
@@ -101,19 +108,21 @@
                     @enderror
                 </div>
 
+                <x-secondary-lang-fields for="blog-edit" :show="$hasSecondaryBlog">
                 <div class="mt-4">
                     <label for="" class="form-label">
-                        {{ __('Description (2nd Language)') }}
+                        {{ __('Description') }} ({{ secondary_language_title() }})
                     </label>
-                    <div id="editor_ar" style="max-height: 750px; overflow-y: auto; min-height: 200px">
-                        {!! old('description_ar', $blog->description_ar) !!}
+                    <div id="editor_secondary" style="max-height: 750px; overflow-y: auto; min-height: 200px">
+                        {!! old('description_secondary', $blog->description_secondary) !!}
                     </div>
-                    <input type="hidden" id="description_ar" name="description_ar"
-                        value="{{ old('description_ar', $blog->description_ar) }}">
-                    @error('description_ar')
+                    <input type="hidden" id="description_secondary" name="description_secondary"
+                        value="{{ old('description_secondary', $blog->description_secondary) }}">
+                    @error('description_secondary')
                         <p class="text text-danger m-0">{{ $message }}</p>
                     @enderror
                 </div>
+                </x-secondary-lang-fields>
             </div>
             <div class="card-footer">
                 <div class="d-flex gap-3 flex-wrap justify-content-end align-items-center w-100">
@@ -186,7 +195,7 @@
             document.getElementById('description').value = quill.root.innerHTML;
         });
 
-        const quillAr = new Quill('#editor_ar', {
+        const quillSecondary = new Quill('#editor_secondary', {
             theme: 'snow',
             modules: {
                 toolbar: [
@@ -228,8 +237,8 @@
             }
         });
 
-        quillAr.on('text-change', function(delta, oldDelta, source) {
-            document.getElementById('description_ar').value = quillAr.root.innerHTML;
+        quillSecondary.on('text-change', function(delta, oldDelta, source) {
+            document.getElementById('description_secondary').value = quillSecondary.root.innerHTML;
         });
     </script>
 

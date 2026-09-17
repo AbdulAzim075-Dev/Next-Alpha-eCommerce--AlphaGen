@@ -24,20 +24,20 @@ class BlogRepository extends Repository
 
         $title = ProductRepository::sanitizeUnicode($request->title);
 
-        $descriptionAr = null;
-        if ($request->filled('description_ar')) {
-            $descriptionAr = ProductRepository::sanitizeUnicode($request->description_ar);
-            $descriptionAr = mb_convert_encoding($descriptionAr, 'HTML-ENTITIES', 'UTF-8');
-            $descriptionAr = Purifier::clean($descriptionAr);
+        $descriptionSecondary = null;
+        if ($request->filled('description_secondary')) {
+            $descriptionSecondary = ProductRepository::sanitizeUnicode($request->description_secondary);
+            $descriptionSecondary = mb_convert_encoding($descriptionSecondary, 'HTML-ENTITIES', 'UTF-8');
+            $descriptionSecondary = Purifier::clean($descriptionSecondary);
         }
 
         $blog = self::create([
             'user_id' => auth()->id(),
             'title' => $title,
-            'title_ar' => $request->title_ar,
+            'title_secondary' => $request->title_secondary,
             'category_id' => $request->category,
             'description' => $description,
-            'description_ar' => $descriptionAr,
+            'description_secondary' => $descriptionSecondary,
             'blog_thumbnail' => $request->thumbnail,
         ]);
 
@@ -61,19 +61,19 @@ class BlogRepository extends Repository
 
         $title = ProductRepository::sanitizeUnicode($request->title);
 
-        $descriptionAr = $blog->description_ar;
-        if ($request->filled('description_ar')) {
-            $descriptionAr = ProductRepository::sanitizeUnicode($request->description_ar);
-            $descriptionAr = mb_convert_encoding($descriptionAr, 'HTML-ENTITIES', 'UTF-8');
-            $descriptionAr = Purifier::clean($descriptionAr);
+        $descriptionSecondary = $blog->description_secondary;
+        if ($request->filled('description_secondary')) {
+            $descriptionSecondary = ProductRepository::sanitizeUnicode($request->description_secondary);
+            $descriptionSecondary = mb_convert_encoding($descriptionSecondary, 'HTML-ENTITIES', 'UTF-8');
+            $descriptionSecondary = Purifier::clean($descriptionSecondary);
         }
 
         $blog->update([
             'title' => $title,
-            'title_ar' => $request->title_ar ?? $blog->title_ar,
+            'title_secondary' => $request->title_secondary ?? $blog->title_secondary,
             'category_id' => $request->category,
             'description' => $description,
-            'description_ar' => $descriptionAr,
+            'description_secondary' => $descriptionSecondary,
             'blog_thumbnail' => $request->thumbnail,
         ]);
 

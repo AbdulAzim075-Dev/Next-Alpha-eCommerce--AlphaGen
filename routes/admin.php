@@ -436,6 +436,7 @@ Route::name('admin.')->group(function () {
             Route::post('/language/{language}/export', 'export')->name('language.export');
             Route::post('/language/{language}/import', 'import')->name('language.import');
             Route::get('/language/{language}/set-default', 'setDefault')->name('language.setDefault');
+            Route::get('/language/{language}/set-secondary', 'setSecondaryDefault')->name('language.setSecondary');
         });
 
         // Customer Notification route

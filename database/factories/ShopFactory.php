@@ -20,7 +20,7 @@ class ShopFactory extends Factory
     {
         return [
             'name' => $this->faker->word,
-            'name_ar' => 'متجر تجريبي',
+            'name_secondary' => 'পরীক্ষামূলক দোকান',
             'user_id' => User::factory()->create(),
             'logo_id' => Media::factory()->create(),
             'banner_id' => Media::factory()->create(),

@@ -16,12 +16,12 @@ class LegalPageController extends Controller
     public function index($slug)
     {
         $page = Page::where('slug', $slug)->first();
-        $isAr = (request()->header('accept-language') ?? 'en') !== 'en';
+        $isSecondary = is_secondary_lang(request()->header('accept-language') ?? 'en');
 
         return $this->json('Legal Page', [
             'content' => [
-                'title' => ($isAr && !empty($page?->title_ar)) ? $page->title_ar : $page?->title,
-                'description' => ($isAr && !empty($page?->description_ar)) ? $page->description_ar : $page?->description,
+                'title' => ($isSecondary && !empty($page?->title_secondary)) ? $page->title_secondary : $page?->title,
+                'description' => ($isSecondary && !empty($page?->description_secondary)) ? $page->description_secondary : $page?->description,
             ],
         ]);
     }

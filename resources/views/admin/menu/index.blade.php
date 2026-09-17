@@ -135,31 +135,37 @@
                                                                                 @if (!$menu->is_external) readonly @endif>
                                                                         </div>
                                                                     </div>
-                                                                    <div class="col-xl-6">
-                                                                        <div class="mb-3">
-                                                                            <label class="form-label">
-                                                                                {{ __('Navigation Label') }}
-                                                                            </label>
-                                                                            <input type="text"
-                                                                                class="form-control solid"
-                                                                                placeholder="{{ $menu->name }}"
-                                                                                name="menu_name"
-                                                                                value="{{ $menu->name }}" required />
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-xl-6">
-                                                                        <div class="mb-3">
-                                                                            <label class="form-label">
-                                                                                {{ __('Navigation Label (2nd Language)') }}
-                                                                            </label>
-                                                                            <input type="text"
-                                                                                class="form-control solid"
-                                                                                placeholder="{{ $menu->ar_name }}"
-                                                                                name="menu_ar_name"
-                                                                                value="{{ $menu->ar_name }}" required />
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="col-xl-6">
+<div class="col-xl-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">
+                                                {{ __('Navigation Label') }}
+                                            </label>
+                                            <input type="text"
+                                                class="form-control solid"
+                                                placeholder="{{ $menu->name }}"
+                                                name="menu_name"
+                                                value="{{ $menu->name }}" required />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xl-6">
+                                        <div class="mb-3">
+                                            <x-secondary-lang-toggle for="menu-edit-{{ $menu->id }}" :checked="(bool) $menu->secondary_name" />
+                                        </div>
+                                        <x-secondary-lang-fields for="menu-edit-{{ $menu->id }}" :show="(bool) $menu->secondary_name">
+                                            <div class="mb-3">
+                                                <label class="form-label">
+                                                    {{ __('Navigation Label') }} ({{ secondary_language_title() }})
+                                                </label>
+                                                <input type="text"
+                                                    class="form-control solid"
+                                                    placeholder="{{ $menu->secondary_name }}"
+                                                    name="menu_secondary_name"
+                                                    value="{{ $menu->secondary_name }}" />
+                                            </div>
+                                        </x-secondary-lang-fields>
+                                    </div>
+                                    <div class="col-xl-6">
                                                                         <div class="mb-3">
                                                                             <label class="form-label">
                                                                                 {{ __('Title Attribute') }}
@@ -234,10 +240,13 @@
                                 <x-input type="text" label="Navigation Label" placeholder="Enter Navigation Label"
                                     name="name" required="true" />
                             </div>
-                            <div class="">
-                                <x-input type="text" label="Navigation Label (2nd Language)" placeholder="Enter Navigation Label in Arabic"
-                                    name="ar_name"  />
-                            </div>
+                            <x-secondary-lang-toggle for="menu-create" :checked="(bool) old('secondary_name')" />
+                            <x-secondary-lang-fields for="menu-create" :show="(bool) old('secondary_name')">
+                                <div class="">
+                                    <x-input type="text" label="{{ __('Navigation Label') }} ({{ secondary_language_title() }})" placeholder="Enter Navigation Label in {{ secondary_language_title() }}"
+                                        name="secondary_name"  />
+                                </div>
+                            </x-secondary-lang-fields>
 
                             <div class="mt-3">
                                 <div class="mt-3">

@@ -45,7 +45,7 @@ class ShopRepository extends Repository
         return self::create([
             'user_id' => $user->id,
             'name' => $request->shop_name,
-            'name_ar' => $request->name_ar,
+            'name_secondary' => $request->name_secondary,
             'logo_id' => $thumbnail ? $thumbnail->id : null,
             'banner_id' => $banner ? $banner->id : null,
             'delivery_charge' => $request->delivery_charge ?? 0,
@@ -74,7 +74,7 @@ class ShopRepository extends Repository
         // update shop
         self::update($shop, [
             'name' => $request->shop_name,
-            'name_ar' => $request->name_ar ?? $shop->name_ar,
+            'name_secondary' => $request->name_secondary ?? $shop->name_secondary,
             'logo_id' => $thumbnail ? $thumbnail->id : null,
             'banner_id' => $banner ? $banner->id : null,
             'delivery_charge' => $request->delivery_charge ?? 0,
@@ -126,7 +126,7 @@ class ShopRepository extends Repository
         // update shop
         self::update($shop, [
             'name' => $request->name,
-            'name_ar' => $request->name_ar ?? $shop->name_ar,
+            'name_secondary' => $request->name_secondary ?? $shop->name_secondary,
             'logo_id' => $thumbnail ? $thumbnail->id : null,
             'banner_id' => $banner ? $banner->id : null,
             'address' => $request->address,

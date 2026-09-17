@@ -23,7 +23,7 @@ class MenuRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:50',
-            'ar_name' => 'nullable|string|max:60',
+            'secondary_name' => 'nullable|string|max:60',
             'page_id' => 'nullable|exists:pages,id',
             'custom_url' => ['required_without:page_id', 'max:250'],
             'target' => 'nullable|string',

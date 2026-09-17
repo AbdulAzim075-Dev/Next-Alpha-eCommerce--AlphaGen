@@ -16,16 +16,19 @@ class Language extends Model
     {
         parent::boot();
 
-        static::created(function () {
+        static::created(function ($language) {
             Cache::forget('languages');
+            Cache::forget('lang_direction_' . $language->name);
         });
 
-        static::updated(function () {
+        static::updated(function ($language) {
             Cache::forget('languages');
+            Cache::forget('lang_direction_' . $language->name);
         });
 
-        static::deleted(function () {
+        static::deleted(function ($language) {
             Cache::forget('languages');
+            Cache::forget('lang_direction_' . $language->name);
         });
     }
 }

@@ -14,19 +14,28 @@
                 <div class="card mt-3">
                     <div class="card-body">
 
-                        <div class="d-flex gap-2 border-bottom pb-2">
+                        @php
+                            $hasSecondaryCategory = (bool) (old('name_secondary') || old('description_secondary'));
+                        @endphp
+
+                        <div class="d-flex gap-2 align-items-center border-bottom pb-2">
                             <i class="fa-solid fa-user"></i>
-                            <h5>
+                            <h5 class="mb-0">
                                 {{__('Category Information')}}
                             </h5>
+                            <x-secondary-lang-toggle for="category-create" class="ms-auto" :checked="$hasSecondaryCategory" />
                         </div>
 
                         <div class="mt-3">
                             <x-input label="Name" name="name" type="text" placeholder="Enter Name" required="true"/>
                         </div>
-                        <div class="mt-3">
-                            <x-input label="Name (2nd Language)" name="name_ar" type="text" placeholder="Enter Arabic name" :value="old('name_ar')" />
-                        </div>
+
+                        <x-secondary-lang-fields for="category-create" :show="$hasSecondaryCategory">
+                            <div class="mt-3">
+                                <x-input label="{{ __('Name') }} ({{ secondary_language_title() }})" name="name_secondary" type="text" placeholder="Enter {{ secondary_language_title() }} name" :value="old('name_secondary')" />
+                            </div>
+                        </x-secondary-lang-fields>
+
                         <div class="mt-3">
                             <x-input label="Order By" name="order_by" type="number" placeholder="Enter category order" min="0" :value="old('order_by', 0)" />
                         </div>
@@ -61,12 +70,14 @@
                             <textarea name="description" class="form-control" rows="3" placeholder="Enter description">{{ old('description') }}</textarea>
                         </div>
 
-                        <div class="mt-3">
-                            <label for="description_ar" class="form-label">
-                                {{__('Description (2nd Language)')}}
-                            </label>
-                            <textarea name="description_ar" id="description_ar" class="form-control" rows="3" placeholder="Enter Arabic description">{{ old('description_ar') }}</textarea>
-                        </div>
+                        <x-secondary-lang-fields for="category-create" :show="$hasSecondaryCategory">
+                            <div class="mt-3">
+                                <label for="description_secondary" class="form-label">
+                                    {{ __('Description') }} ({{ secondary_language_title() }})
+                                </label>
+                                <textarea name="description_secondary" id="description_secondary" class="form-control" rows="3" placeholder="Enter {{ secondary_language_title() }} description">{{ old('description_secondary') }}</textarea>
+                            </div>
+                        </x-secondary-lang-fields>
 
 
                         <div class="mt-5 d-flex gap-2 justify-content-between flex-wrap">

@@ -14,15 +14,27 @@
         <div class="card mt-3">
             <div class="card-body">
 
+                @php
+                    $hasSecondaryProduct = (bool) (old('name_secondary', $product->name_secondary) || old('short_description_secondary', $product->short_description_secondary) || old('description_secondary', $product->description_secondary));
+                @endphp
+
+                <div class="d-flex align-items-center justify-content-between mb-2">
+                    <span class="fz-18">{{ __('Product Info') }}</span>
+                    <x-secondary-lang-toggle for="product-edit" :checked="$hasSecondaryProduct" />
+                </div>
+                <hr class="text-muted mt-0">
+
                 <div class="">
                     <x-input label="Product Name" name="name" id="product_name" type="text" placeholder="Product Name"
                         required="true" value="{{ $product->name }}" />
                 </div>
 
-                <div class="mt-3">
-                    <x-input label="Product Name (2nd Language)" name="name_ar" id="product_name_ar" type="text"
-                        placeholder="Arabic Product Name" :value="old('name_ar', $product->name_ar)" />
-                </div>
+                <x-secondary-lang-fields for="product-edit" :show="$hasSecondaryProduct">
+                    <div class="mt-3">
+                        <x-input label="{{ __('Product Name') }} ({{ secondary_language_title() }})" name="name_secondary" id="product_name_secondary" type="text"
+                            placeholder="{{ secondary_language_title() }} Product Name" :value="old('name_secondary', $product->name_secondary)" />
+                    </div>
+                </x-secondary-lang-fields>
 
                 <div class="mt-3">
                     <x-input label="Product Slug" name="slug" id="product_slug" type="text"
@@ -42,16 +54,18 @@
                     @enderror
                 </div>
 
-                <div class="mt-3">
-                    <label for="short_description_ar">
-                        {{ __('Short Description (2nd Language)') }}
-                    </label>
-                    <textarea name="short_description_ar" class="form-control" id="short_description_ar" rows="2"
-                        placeholder="Short Description (2nd Language)">{{ old('short_description_ar', $product->short_description_ar) }}</textarea>
-                    @error('short_description_ar')
-                        <p class="text text-danger m-0">{{ $message }}</p>
-                    @enderror
-                </div>
+                <x-secondary-lang-fields for="product-edit" :show="$hasSecondaryProduct">
+                    <div class="mt-3">
+                        <label for="short_description_secondary">
+                            {{ __('Short Description') }} ({{ secondary_language_title() }})
+                        </label>
+                        <textarea name="short_description_secondary" class="form-control" id="short_description_secondary" rows="2"
+                            placeholder="{{ __('Short Description') }} ({{ secondary_language_title() }})">{{ old('short_description_secondary', $product->short_description_secondary) }}</textarea>
+                        @error('short_description_secondary')
+                            <p class="text text-danger m-0">{{ $message }}</p>
+                        @enderror
+                    </div>
+                </x-secondary-lang-fields>
 
                 <div class="mt-3">
                     <label for="">
@@ -72,19 +86,21 @@
                     @enderror
                 </div>
 
-                <div class="mt-4">
-                    <label for="">
-                        {{ __('Description (2nd Language)') }}
-                    </label>
-                    <div id="editor_ar" style="max-height: 750px; overflow-y: auto">
-                        {!! old('description_ar', $product->description_ar) !!}
+                <x-secondary-lang-fields for="product-edit" :show="$hasSecondaryProduct">
+                    <div class="mt-4">
+                        <label for="">
+                            {{ __('Description') }} ({{ secondary_language_title() }})
+                        </label>
+                        <div id="editor_secondary" style="max-height: 750px; min-height: 200px; overflow-y: auto">
+                            {!! old('description_secondary', $product->description_secondary) !!}
+                        </div>
+                        <input type="hidden" id="description_secondary" name="description_secondary"
+                            value="{{ old('description_secondary', $product->description_secondary) }}">
+                        @error('description_secondary')
+                            <p class="text text-danger m-0">{{ $message }}</p>
+                        @enderror
                     </div>
-                    <input type="hidden" id="description_ar" name="description_ar"
-                        value="{{ old('description_ar', $product->description_ar) }}">
-                    @error('description_ar')
-                        <p class="text text-danger m-0">{{ $message }}</p>
-                    @enderror
-                </div>
+                </x-secondary-lang-fields>
 
 
                 <!--######## General Information ##########-->
@@ -1436,7 +1452,7 @@
             document.getElementById('description').value = correctULTagFromQuill(quill.root.innerHTML);
         });
 
-        const quillAr = new Quill('#editor_ar', {
+        const quillSecondary = new Quill('#editor_secondary', {
             theme: 'snow',
             modules: {
                 toolbar: [
@@ -1478,8 +1494,8 @@
             }
         });
 
-        quillAr.on('text-change', function(delta, oldDelta, source) {
-            document.getElementById('description_ar').value = correctULTagFromQuill(quillAr.root.innerHTML);
+        quillSecondary.on('text-change', function(delta, oldDelta, source) {
+            document.getElementById('description_secondary').value = correctULTagFromQuill(quillSecondary.root.innerHTML);
         });
     </script>
 

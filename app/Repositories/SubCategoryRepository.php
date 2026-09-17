@@ -29,9 +29,9 @@ class SubCategoryRepository extends Repository
         $subCategory = self::create([
             'shop_id' => $shop->id,
             'name' => $request->name,
-            'name_ar' => $request->name_ar ?? $request->name,
+            'name_secondary' => $request->name_secondary ?? $request->name,
             'short_description' => $request->short_description,
-            'short_description_ar' => $request->short_description_ar ?? $request->short_description,
+            'short_description_secondary' => $request->short_description_secondary ?? $request->short_description,
             'sub_thumbnail' => $request->thumbnail,
             'is_active' => true,
         ]);
@@ -59,9 +59,9 @@ class SubCategoryRepository extends Repository
 
         $subCategory->update([
             'name' => $request->name,
-            'name_ar' => $request->name_ar ?? $request->name,
+            'name_secondary' => $request->name_secondary ?? $request->name,
             'short_description' => $request->short_description,
-            'short_description_ar' => $request->short_description_ar ?? $request->short_description,
+            'short_description_secondary' => $request->short_description_secondary ?? $request->short_description,
             'sub_thumbnail' => $request->thumbnail,
         ]);
 

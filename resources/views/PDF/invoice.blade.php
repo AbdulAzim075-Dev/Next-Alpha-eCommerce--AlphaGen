@@ -1,5 +1,5 @@
 @php
-    $directory = app()->getLocale() == 'ar' ? 'rtl' : 'ltr';
+    $directory = is_rtl_lang() ? 'rtl' : 'ltr';
 @endphp
 <!DOCTYPE html>
 <html lang="en">
@@ -415,8 +415,8 @@
                             $name = $product->name;
                             $shortDescription = $product->short_description ?? '';
 
-                            if ($directory == 'rtl') {
-                                $translation = $product->translations()?->where('lang', 'ar')->first();
+                            if (is_secondary_lang(app()->getLocale())) {
+                                $translation = $product->translations()?->where('lang', secondary_locale())->first();
                                 $name = $translation?->name ?? $name;
                                 $shortDescription = $translation?->short_description ?? $shortDescription;
                             }

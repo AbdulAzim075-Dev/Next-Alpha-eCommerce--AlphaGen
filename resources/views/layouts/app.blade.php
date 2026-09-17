@@ -1,5 +1,5 @@
 @php
-    $directory = app()->getLocale() == 'ar' ? 'rtl' : 'ltr';
+    $directory = is_rtl_lang() ? 'rtl' : 'ltr';
 @endphp
 <!DOCTYPE html>
 <html lang="en" dir="{{ $directory }}">
@@ -1168,6 +1168,15 @@
 
 
     <script src="{{ asset('assets/scripts/galleryFilemanager.js') }}"></script>
+    <script>
+        // Reveal or hide secondary language fields (used across admin forms)
+        document.addEventListener('change', function (e) {
+            const toggle = e.target.closest('.secondary-lang-toggle');
+            if (!toggle) return;
+            document.querySelectorAll('[data-secondary-fields="' + toggle.getAttribute('data-secondary-toggle') + '"]')
+                .forEach((el) => el.classList.toggle('d-none', !toggle.checked));
+        });
+    </script>
 </body>
 
 </html>

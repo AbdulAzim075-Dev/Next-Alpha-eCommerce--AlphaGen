@@ -210,8 +210,8 @@ class ProductRepository extends Repository
 
             $videoMedia = self::videoCreateOrUpdate($request);
             $description = Purifier::clean(self::sanitizeUnicode($request->description));
-            $descriptionAr = $request->filled('description_ar')
-                ? Purifier::clean(self::sanitizeUnicode($request->description_ar))
+            $descriptionSecondary = $request->filled('description_secondary')
+                ? Purifier::clean(self::sanitizeUnicode($request->description_secondary))
                 : null;
 
             $keywords = implode(',', $request->meta_keywords ?? []);
@@ -223,12 +223,12 @@ class ProductRepository extends Repository
             $product = self::create([
                 'shop_id' => $shop?->id,
                 'name' => $request->name,
-                'name_ar' => $request->name_ar,
+                'name_secondary' => $request->name_secondary,
                 'slug' => $request->slug,
                 'description' => $description,
-                'description_ar' => $descriptionAr,
+                'description_secondary' => $descriptionSecondary,
                 'short_description' => $request->short_description,
-                'short_description_ar' => $request->short_description_ar,
+                'short_description_secondary' => $request->short_description_secondary,
                 'brand_id' => $request->brand,
                 'unit_id' => $request->unit,
                 'price' => $request->price,
@@ -349,9 +349,9 @@ class ProductRepository extends Repository
 
         $videoMedia = self::videoCreateOrUpdate($request, $product);
         $description = Purifier::clean(self::sanitizeUnicode($request->description));
-        $descriptionAr = $request->filled('description_ar')
-            ? Purifier::clean(self::sanitizeUnicode($request->description_ar))
-            : $product->description_ar;
+        $descriptionSecondary = $request->filled('description_secondary')
+            ? Purifier::clean(self::sanitizeUnicode($request->description_secondary))
+            : $product->description_secondary;
         $keywords = implode(',', $request->meta_keywords ?? []);
 
         $discountPrice = 0;
@@ -363,12 +363,12 @@ class ProductRepository extends Repository
 
         self::update($product, [
             'name' => $request->name,
-            'name_ar' => $request->name_ar ?? $product->name_ar,
+            'name_secondary' => $request->name_secondary ?? $product->name_secondary,
             'slug' => $request->slug,
             'description' => $description,
-            'description_ar' => $descriptionAr,
+            'description_secondary' => $descriptionSecondary,
             'short_description' => $request->short_description,
-            'short_description_ar' => $request->short_description_ar ?? $product->short_description_ar,
+            'short_description_secondary' => $request->short_description_secondary ?? $product->short_description_secondary,
             'brand_id' => $request->brand ?? null,
             'unit_id' => $request->unit ?? null,
             'price' => $request->price,

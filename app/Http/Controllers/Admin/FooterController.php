@@ -30,7 +30,7 @@ class FooterController extends Controller
 
         $footer->update([
             'title' => $request->title,
-            'ar_title' => $request->ar_title ?? $footer->ar_title,
+            'secondary_title' => $request->secondary_title ?? $footer->secondary_title,
         ]);
 
         return back()->withSuccess('updated successfully');
@@ -42,15 +42,15 @@ class FooterController extends Controller
             'title' => 'required',
         ]);
 
-        $arTitle = $request->ar_title ?? $footerItem->ar_title;
+        $secondaryTitle = $request->secondary_title ?? $footerItem->secondary_title;
 
         if ($footerItem->type == 'email' || $footerItem->type == 'phone') {
-            $arTitle = $request->title;
+            $secondaryTitle = $request->title;
         }
 
         $footerItem->update([
             'title' => $request->title,
-            'ar_title' => $arTitle,
+            'secondary_title' => $secondaryTitle,
             'icon' => $request->icon ?? $footerItem->icon,
             'url' => $request->url ?? $footerItem->url,
         ]);

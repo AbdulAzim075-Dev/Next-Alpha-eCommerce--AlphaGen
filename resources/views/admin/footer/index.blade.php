@@ -142,9 +142,11 @@
                                                             <x-input name="title" label="Title" type="text" class="form-control-sm"
                                                                 value="{{ $footer->title }}" placeholder="Enter Title"
                                                                 required="true" />
-                                                            <x-input name="ar_title" label="Title (2nd Language)" type="text" class="form-control-sm"
-                                                                value="{{ $footer->ar_title }}" placeholder="Enter Title Arabic"
-                                                                required="true" />
+                                                            <x-secondary-lang-toggle for="footer-title-{{ $footer->id }}" :checked="(bool) $footer->secondary_title" />
+                                                            <x-secondary-lang-fields for="footer-title-{{ $footer->id }}" :show="(bool) $footer->secondary_title">
+                                                                <x-input name="secondary_title" label="{{ __('Title') }} ({{ secondary_language_title() }})" type="text" class="form-control-sm"
+                                                                    value="{{ $footer->secondary_title }}" placeholder="Enter Title in {{ secondary_language_title() }}" />
+                                                            </x-secondary-lang-fields>
 
                                                             <button class="btn btn-primary btn-sm mt-3" type="submit">
                                                                 {{ __('Update') }}
@@ -240,12 +242,15 @@
                                                                             </label>
                                                                             <textarea name="title" class="form-control form-control-sm" placeholder="short text" required>{{ $item->title }}</textarea>
                                                                         </div>
-                                                                        <div class="col-12 mb-3">
-                                                                            <label class="form-label mb-1">
-                                                                                {{ __('Short Text (2nd Language)') }}
-                                                                            </label>
-                                                                            <textarea name="ar_title" class="form-control form-control-sm" placeholder="short text" required>{{ $item->ar_title }}</textarea>
-                                                                        </div>
+<x-secondary-lang-toggle for="footer-item-{{ $item->id }}" :checked="(bool) $item->secondary_title" />
+                                        <x-secondary-lang-fields for="footer-item-{{ $item->id }}" :show="(bool) $item->secondary_title">
+                                            <div class="col-12 mb-3">
+                                                <label class="form-label mb-1">
+                                                    {{ __('Short Text') }} ({{ secondary_language_title() }})
+                                                </label>
+                                                <textarea name="secondary_title" class="form-control form-control-sm" placeholder="short text">{{ $item->secondary_title }}</textarea>
+                                            </div>
+                                        </x-secondary-lang-fields>
                                                                     @else
                                                                         <div class="col-12 mb-3">
                                                                             <label class="form-label mb-1">
@@ -258,17 +263,19 @@
                                                                                 value="{{ $item->title }}"
                                                                                 required="">
                                                                         </div>
-                                                                        <div class="col-12 mb-3">
-                                                                            <label class="form-label mb-1">
-                                                                                {{ __('Navigation Label (2nd Language)') }}
-                                                                            </label>
-                                                                            <input type="text"
-                                                                                class="form-control form-control-sm"
-                                                                                placeholder="{{ __('Navigation Label (2nd Language)') }}"
-                                                                                name="ar_title"
-                                                                                value="{{ $item->ar_title }}"
-                                                                                required="">
-                                                                        </div>
+<x-secondary-lang-toggle for="footer-item-{{ $item->id }}" :checked="(bool) $item->secondary_title" />
+                                        <x-secondary-lang-fields for="footer-item-{{ $item->id }}" :show="(bool) $item->secondary_title">
+                                            <div class="col-12 mb-3">
+                                                <label class="form-label mb-1">
+                                                    {{ __('Navigation Label') }} ({{ secondary_language_title() }})
+                                                </label>
+                                                <input type="text"
+                                                    class="form-control form-control-sm"
+                                                    placeholder="{{ __('Navigation Label') }} ({{ secondary_language_title() }})"
+                                                    name="secondary_title"
+                                                    value="{{ $item->secondary_title }}">
+                                            </div>
+                                        </x-secondary-lang-fields>
                                                                         <div class="col-12 mb-3">
                                                                             <label
                                                                                 class="form-label mb-1">{{ __('URL') }}</label>

@@ -50,10 +50,10 @@ class ProductResource extends JsonResource
         $price = $this->price;
         $discountPrice = $flashSaleProduct ? $flashSaleProduct->pivot->price : $this->discount_price;
 
-        $isAr = $lang !== 'en';
-        $name = ($isAr && !empty($this->name_ar)) ? $this->name_ar : $this->name;
-        $shortDescription = ($isAr && !empty($this->short_description_ar)) ? $this->short_description_ar : $this->short_description;
-        $brandName = ($isAr && !empty($this->brand?->name_ar)) ? $this->brand->name_ar : $this->brand?->name;
+        $isSecondary = is_secondary_lang($lang);
+        $name = ($isSecondary && !empty($this->name_secondary)) ? $this->name_secondary : $this->name;
+        $shortDescription = ($isSecondary && !empty($this->short_description_secondary)) ? $this->short_description_secondary : $this->short_description;
+        $brandName = ($isSecondary && !empty($this->brand?->name_secondary)) ? $this->brand->name_secondary : $this->brand?->name;
         module_exists('PreOrder') ? $isPreorder = (bool) $this->is_preorder : $isPreorder = false;
 
         return [

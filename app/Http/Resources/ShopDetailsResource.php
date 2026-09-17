@@ -30,11 +30,11 @@ class ShopDetailsResource extends JsonResource
             $shopStatus = 'Online';
         }
 
-        $isAr = (request()->header('accept-language') ?? 'en') !== 'en';
+        $isSecondary = is_secondary_lang(request()->header('accept-language') ?? 'en');
 
         return [
             'id' => $this->id,
-            'name' => ($isAr && !empty($this->name_ar)) ? $this->name_ar : $this->name,
+            'name' => ($isSecondary && !empty($this->name_secondary)) ? $this->name_secondary : $this->name,
             'logo' => $this->logo,
             'banner' => $this->banner,
             'total_products' => (int) $this->products()->isActive()->count(),

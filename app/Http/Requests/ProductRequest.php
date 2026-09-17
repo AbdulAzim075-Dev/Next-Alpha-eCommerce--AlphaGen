@@ -41,7 +41,7 @@ class ProductRequest extends FormRequest
 
         return [
             'name' => 'required|string|max:191',
-            'name_ar' => 'nullable|string|max:191',
+            'name_secondary' => 'nullable|string|max:191',
             'slug' => [
                 'nullable',
                 'string',
@@ -49,9 +49,9 @@ class ProductRequest extends FormRequest
                 Rule::unique('products', 'slug')->ignore($this->product?->id),
             ],
             'description' => 'required|string',
-            'description_ar' => 'nullable|string',
+            'description_secondary' => 'nullable|string',
             'short_description' => 'required|string|max:191',
-            'short_description_ar' => 'nullable|string|max:191',
+            'short_description_secondary' => 'nullable|string|max:191',
             'category' => 'required|exists:categories,id',
             'sub_category' => 'nullable|array|exists:sub_categories,id',
             'brand' => 'nullable|exists:brands,id',

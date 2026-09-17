@@ -22,10 +22,17 @@
                             label="Title" />
                     </div>
 
-                    <div class="mt-3">
-                        <x-input name='title_ar' type="text" placeholder="Arabic Title"
-                            value="{{ old('title_ar', $page->title_ar) }}" label="Title (2nd Language)" />
-                    </div>
+                    @php
+                        $hasSecondaryLegal = (bool) (old('title_secondary', $page->title_secondary) || old('description_secondary', $page->description_secondary));
+                    @endphp
+                    <x-secondary-lang-toggle for="legal-page-edit" :checked="$hasSecondaryLegal" />
+
+                    <x-secondary-lang-fields for="legal-page-edit" :show="$hasSecondaryLegal">
+                        <div class="mt-3">
+                            <x-input name='title_secondary' type="text" placeholder="{{ secondary_language_title() }} Title"
+                                value="{{ old('title_secondary', $page->title_secondary) }}" label="{{ __('Title') }} ({{ secondary_language_title() }})" />
+                        </div>
+                    </x-secondary-lang-fields>
 
                     <div class="mt-3">
                         <label for="editor" class="fw-bold">{{ __('Content') }}</label>
@@ -39,18 +46,20 @@
                         @enderror
                     </div>
 
-                    <div class="mt-4">
-                        <label for="editor_ar" class="fw-bold">{{ __('Content (2nd Language)') }}</label>
+                    <x-secondary-lang-fields for="legal-page-edit" :show="$hasSecondaryLegal">
+                        <div class="mt-4">
+                            <label for="editor_secondary" class="fw-bold">{{ __('Content') }} ({{ secondary_language_title() }})</label>
 
-                        <div id="editor_ar">
-                            {!! old('description_ar', $page->description_ar) !!}
+                            <div id="editor_secondary" style="min-height: 200px">
+                                {!! old('description_secondary', $page->description_secondary) !!}
+                            </div>
+                            <input type="hidden" id="description_secondary" name="description_secondary"
+                                value="{{ old('description_secondary', $page->description_secondary) }}">
+                            @error('description_secondary')
+                                <p class="text text-danger m-0">{{ $message }}</p>
+                            @enderror
                         </div>
-                        <input type="hidden" id="description_ar" name="description_ar"
-                            value="{{ old('description_ar', $page->description_ar) }}">
-                        @error('description_ar')
-                            <p class="text text-danger m-0">{{ $message }}</p>
-                        @enderror
-                    </div>
+                    </x-secondary-lang-fields>
 
                 </div>
                 <div class="card-footer text-center">
@@ -109,7 +118,7 @@
             document.getElementById('description').value = quill.root.innerHTML;
         });
 
-        const quillAr = new Quill('#editor_ar', {
+        const quillSecondary = new Quill('#editor_secondary', {
             theme: 'snow',
             modules: {
                 toolbar: [
@@ -151,8 +160,8 @@
             }
         });
 
-        quillAr.on('text-change', function(delta, oldDelta, source) {
-            document.getElementById('description_ar').value = quillAr.root.innerHTML;
+        quillSecondary.on('text-change', function(delta, oldDelta, source) {
+            document.getElementById('description_secondary').value = quillSecondary.root.innerHTML;
         });
     </script>
 @endpush

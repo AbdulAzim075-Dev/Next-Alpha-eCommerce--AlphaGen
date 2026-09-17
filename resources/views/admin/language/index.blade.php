@@ -43,6 +43,13 @@
                                     <img src="{{ asset('assets/icons-admin/language-2.svg') }}" alt="default" loading="lazy" />
                                 </a>
                             @endif
+                            @if ($language->name === secondary_locale())
+                                <span class="badge bg-success text-white">{{ __('Secondary') }}</span>
+                            @else
+                                <a href="{{ route('admin.language.setSecondary', $language->id) }}" class="circleIcon btn btn-outline-success btn-sm" title="{{ __('Set As Secondary') }}">
+                                    <img src="{{ asset('assets/icons-admin/language-2.svg') }}" alt="secondary" loading="lazy" />
+                                </a>
+                            @endif
                             @hasPermission('admin.language.edit')
                                 <a href="{{ route('admin.language.edit', $language->id) }}" class="circleIcon btn btn-outline-info btn-sm">
                                     <img src="{{ asset('assets/icons-admin/edit.svg') }}" alt="edit" loading="lazy" />

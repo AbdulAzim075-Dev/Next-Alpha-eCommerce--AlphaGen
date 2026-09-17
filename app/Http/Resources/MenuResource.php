@@ -14,11 +14,11 @@ class MenuResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $lang =request()->header('accept-language') ?? 'en';
+        $lang = request()->header('accept-language') ?? 'en';
 
         return [
             'id' => $this->id,
-            'name' => $lang == 'ar' ? $this->ar_name : $this->name,
+            'name' => is_secondary_lang($lang) ? $this->secondary_name : $this->name,
             'title' => $this->title,
             'url' => $this->url,
             'target' => $this->target,

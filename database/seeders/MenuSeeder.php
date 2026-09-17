@@ -17,7 +17,7 @@ class MenuSeeder extends Seeder
         $data = [
             [
                 'name' => 'Home',
-                'ar_name' => 'الرئيسية',
+                'secondary_name' => 'হোম',
                 'url' => '/',
                 'title' => 'Home',
                 'original_name' => 'Home',
@@ -28,7 +28,7 @@ class MenuSeeder extends Seeder
             ],
             [
                 'name' => 'Products',
-                'ar_name'=> 'المنتجات',
+                'secondary_name'=> 'পণ্যসমূহ',
                 'url' => '/products',
                 'title' => 'Products',
                 'original_name' => 'Products',
@@ -39,7 +39,7 @@ class MenuSeeder extends Seeder
             ],
             // [
             //     'name' => 'Digital Products',
-            //     'ar_name'=> 'المنتجات الرقمية',
+            //     'secondary_name'=> 'ডিজিটাল পণ্যসমূহ',
             //     'url' => '/digital-products',
             //     'title' => 'Digital Products',
             //     'original_name' => 'Digital Products',
@@ -50,7 +50,7 @@ class MenuSeeder extends Seeder
             // ],
             [
                 'name' => 'Shops',
-                'ar_name'=> 'المتاجر',
+                'secondary_name'=> 'দোকানসমূহ',
                 'url' => '/shops',
                 'title' => 'Shops',
                 'original_name' => 'Shops',
@@ -61,7 +61,7 @@ class MenuSeeder extends Seeder
             ],
             [
                 'name' => 'Brands',
-                'ar_name'=> 'ماركة',
+                'secondary_name'=> 'ব্র্যান্ড',
                 'url' => '/brands',
                 'title' => 'Brands',
                 'original_name' => 'Brands',
@@ -72,7 +72,7 @@ class MenuSeeder extends Seeder
             ],
             // [
             //     'name' => 'Best Deal',
-            //     'ar_name'=> 'أفضل العروض',
+            //     'secondary_name'=> 'সেরা অফার',
             //     'url' => '/best-deal',
             //     'title' => 'Best Deal',
             //     'original_name' => 'Best Deal',
@@ -83,7 +83,7 @@ class MenuSeeder extends Seeder
             // ],
             [
                 'name' => 'Contact',
-                'ar_name'=> 'اتصل بنا',
+                'secondary_name'=> 'যোগাযোগ',
                 'url' => '/contact-us',
                 'title' => 'Contact',
                 'original_name' => 'Contact',
@@ -94,7 +94,7 @@ class MenuSeeder extends Seeder
             ],
             [
                 'name' => 'Blogs',
-                'ar_name'=> 'المدونات',
+                'secondary_name'=> 'ব্লগ',
                 'url' => '/blogs',
                 'title' => 'Blogs',
                 'original_name' => 'Blogs',

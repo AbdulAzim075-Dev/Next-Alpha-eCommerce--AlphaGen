@@ -30,7 +30,7 @@ class MenuController extends Controller
 
         Menu::create([
             'name' => $request->name,
-            'ar_name' => $request->ar_name ?? $request->name,
+            'secondary_name' => $request->secondary_name ?? $request->name,
             'title' => $request->name,
             'url' => $request->custom_url ? $request->custom_url : ('/'.$page?->url),
             'order' => $maxOrder + 1,
@@ -46,7 +46,7 @@ class MenuController extends Controller
     {
         $menu->update([
             'name' => $request->menu_name ?? $menu->name,
-            'ar_name' => $request->menu_ar_name ?? $menu->ar_name,
+            'secondary_name' => $request->menu_secondary_name ?? $menu->secondary_name,
             'title' => $request->menu_title,
             'url' => $menu->is_default ? $menu->url : $request->menu_url,
         ]);

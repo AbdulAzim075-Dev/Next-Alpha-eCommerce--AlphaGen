@@ -24,12 +24,12 @@ class BlogFactory extends Factory
         return [
             'user_id' => $user->id,
             'title' => $title,
-            'title_ar' => 'مقالة تجريبية عن التسوق الإلكتروني',
+            'title_secondary' => 'অনলাইন শপিং সম্পর্কে পরীক্ষামূলক নিবন্ধ',
             'slug' => Str::slug($title),
             'media_id' => Media::factory()->create(),
             'category_id' => $category->id,
             'description' => $this->faker->paragraphs(rand(5, 10), true),
-            'description_ar' => 'هذا محتوى عربي تجريبي للمقالة يساعد على اختبار عرض المدونات متعددة اللغات داخل المتجر.',
+            'description_secondary' => 'এটি একটি পরীক্ষামূলক বাংলা নিবন্ধের বিষয়বস্তু যা স্টোরের মধ্যে বহুভাষিক ব্লগ প্রদর্শন পরীক্ষায় সহায়তা করে।',
             'is_active' => $this->faker->boolean(),
         ];
     }
